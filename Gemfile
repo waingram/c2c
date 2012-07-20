@@ -18,6 +18,7 @@ group :assets do
   # gem 'therubyracer', :platforms => :ruby
 
   gem 'uglifier', '>= 1.0.3'
+  gem 'twitter-bootstrap-rails'
 end
 
 gem 'jquery-rails'
@@ -26,7 +27,7 @@ gem 'jquery-rails'
 # gem 'bcrypt-ruby', '~> 3.0.0'
 
 # To use Jbuilder templates for JSON
-# gem 'jbuilder'
+gem 'jbuilder'
 
 # Use unicorn as the app server
 # gem 'unicorn'
@@ -36,3 +37,10 @@ gem 'jquery-rails'
 
 # To use debugger
 # gem 'debugger'
+
+gem 'haml'
+gem 'haml-rails'
+
+gem 'simple_form'
+
+gem 'paperclip'
