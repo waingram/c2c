@@ -25,7 +25,7 @@
             %span.icon-bar
             %span.icon-bar
             %span.icon-bar
-          %a.brand{:href => "#"}Connecting-2-Collections
+          %a.brand{:href => "/"}Connecting-2-Collections
           .container.nav-collapse
             %ul.nav
               %li= link_to "Upload Packages", packages_path
@@ -33,7 +33,10 @@
                 %li= link_to @package.title, package_path(@package)
 
     .container
-
+      - flash.each do |name, msg|
+        %div{:class => name == :notice ? "alert alert-success" : "alert alert-error"}
+          = msg
+          
       .content
         .row
           .span9
