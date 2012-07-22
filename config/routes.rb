@@ -1,4 +1,6 @@
 C2c::Application.routes.draw do
+  resources :items
+
   resources :packages
 
   # The priority is based upon order of creation:
