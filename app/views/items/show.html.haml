@@ -1,9 +1,13 @@
-%p#notice= notice
+- model_class = Item
+.page-header
+  %h1=t '.title', :default => model_class.model_name.human
 
 %p
-  %b Description:
+  %strong= model_class.human_attribute_name(:description) + ':'
+  %br
   = @item.description
 
-= link_to 'Edit', edit_item_path(@item)
-\|
-= link_to 'Back', items_path
+.form-actions
+  = link_to t('.back', :default => t("helpers.links.back")), items_path, :class => 'btn'
+  = link_to t('.edit', :default => t("helpers.links.edit")), edit_item_path(@item), :class => 'btn'
+  = link_to t('.destroy', :default => t("helpers.links.destroy")), item_path(@item), :method => "delete", :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')), :class => 'btn btn-danger'
