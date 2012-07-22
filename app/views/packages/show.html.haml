@@ -1,0 +1,12 @@
+%p#notice= notice
+
+%p
+  %b Title:
+  = @package.title
+%p
+  %b Description:
+  = @package.description
+
+= link_to 'Edit', edit_package_path(@package)
+\|
+= link_to 'Back', packages_path
