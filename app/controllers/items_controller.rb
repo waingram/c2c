@@ -1,19 +1,17 @@
 class ItemsController < ApplicationController
+
+  before_filter :load_package
+
   # GET /items
   # GET /items.json
   def index
-    @items = Item.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @items }
-    end
+    @items = @package.items
   end
 
   # GET /items/1
   # GET /items/1.json
   def show
-    @item = Item.find(params[:id])
+    @item = @package.items.find(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -24,7 +22,7 @@ class ItemsController < ApplicationController
   # GET /items/new
   # GET /items/new.json
   def new
-    @item = Item.new
+    @item = @package.items.new
 
     respond_to do |format|
       format.html # new.html.erb
@@ -34,33 +32,33 @@ class ItemsController < ApplicationController
 
   # GET /items/1/edit
   def edit
-    @item = Item.find(params[:id])
+    @item = @package.items.find(params[:id])
   end
 
   # POST /items
   # POST /items.json
   def create
-    @item = Item.new(params[:item])
+    @item = @package.items.new(params[:item])
 
-    respond_to do |format|
-      if @item.save
-        format.html { redirect_to @item, notice: 'Item was successfully created.' }
-        format.json { render json: @item, status: :created, location: @item }
-      else
-        format.html { render action: "new" }
-        format.json { render json: @item.errors, status: :unprocessable_entity }
+    if @photo.save
+      respond_to do |format|
+        format.html {redirect_to package_items_path(@package), notice: 'Item was successfully created.'}
+        @items = [@item]
+        format.json {render 'index'}
       end
+    else
+      render 'new'
     end
   end
 
   # PUT /items/1
   # PUT /items/1.json
   def update
-    @item = Item.find(params[:id])
+    @item = @package.items.find(params[:id])
 
     respond_to do |format|
       if @item.update_attributes(params[:item])
-        format.html { redirect_to @item, notice: 'Item was successfully updated.' }
+        format.html { redirect_to @package, notice: 'Item was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -72,12 +70,17 @@ class ItemsController < ApplicationController
   # DELETE /items/1
   # DELETE /items/1.json
   def destroy
-    @item = Item.find(params[:id])
+    @item = @package.items.find(params[:id])
     @item.destroy
 
     respond_to do |format|
-      format.html { redirect_to items_url }
+      format.html { redirect_to @package }
       format.json { head :no_content }
     end
+  end
+
+  private
+  def load_package
+    @package = Package.find(params[:package_id])
   end
 end
