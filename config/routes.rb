@@ -1,10 +1,10 @@
 C2c::Application.routes.draw do
   
   root to: "packages#index"
-  
-  resources :items
 
-  resources :packages
+  resources :packages do
+    resources :items
+  end
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
