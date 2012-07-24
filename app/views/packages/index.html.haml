@@ -1,14 +1,14 @@
 - model_class = Package
 .page-header
-  %h1=t '.title', :default => model_class.model_name.human.pluralize
+  %h1 Create a new upload package
 %table.table.table-striped
-  %thead
-    %tr
-      %th= model_class.human_attribute_name(:id)
-      %th= model_class.human_attribute_name(:title)
-      %th= model_class.human_attribute_name(:description)
-      %th= model_class.human_attribute_name(:created_at)
-      %th=t '.actions', :default => t("helpers.actions")
+  -#%thead
+  -#  %tr
+  -#    %th= model_class.human_attribute_name(:id)
+  -#    %th= model_class.human_attribute_name(:title)
+  -#    %th= model_class.human_attribute_name(:description)
+  -#    %th= model_class.human_attribute_name(:created_at)
+  -#    %th=t '.actions', :default => t("helpers.actions")
   %tbody
     - @packages.each do |package|
       %tr
@@ -20,4 +20,4 @@
           = link_to t('.edit', :default => t("helpers.links.edit")), edit_package_path(package), :class => 'btn btn-mini'
           = link_to t('.destroy', :default => t("helpers.links.destroy")), package_path(package), :method => :delete, :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')), :class => 'btn btn-mini btn-danger'
 
-= link_to t('.new', :default => t("helpers.links.new")), new_package_path, :class => 'btn btn-primary'
+= link_to "Create New", new_package_path, :class => 'btn btn-primary'

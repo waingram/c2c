@@ -1,5 +1,5 @@
 /*
- * jQuery File Upload Plugin 5.12
+ * jQuery File Upload Plugin 5.10.1
  * https://github.com/blueimp/jQuery-File-Upload
  *
  * Copyright 2010, Sebastian Tschan
@@ -109,10 +109,6 @@
             // global progress calculation. Set the following option to false to
             // prevent recalculating the global progress data:
             recalculateProgress: true,
-            // Interval in milliseconds to calculate and trigger progress events:
-            progressInterval: 100,
-            // Interval in milliseconds to calculate progress bitrate:
-            bitrateInterval: 500,
 
             // Additional form data to be sent along with the file uploads can be set
             // using this option, which accepts an array of objects with name and
@@ -184,21 +180,6 @@
             'forceIframeTransport'
         ],
 
-        _BitrateTimer: function () {
-            this.timestamp = +(new Date());
-            this.loaded = 0;
-            this.bitrate = 0;
-            this.getBitrate = function (now, loaded, interval) {
-                var timeDiff = now - this.timestamp;
-                if (!this.bitrate || !interval || timeDiff > interval) {
-                    this.bitrate = (loaded - this.loaded) * (1000 / timeDiff) * 8;
-                    this.loaded = loaded;
-                    this.timestamp = now;
-                }
-                return this.bitrate;
-            };
-        },
-
         _isXHRUpload: function (options) {
             return !options.forceIframeTransport &&
                 ((!options.multipart && $.support.xhrFileUpload) ||
@@ -209,11 +190,9 @@
             var formData;
             if (typeof options.formData === 'function') {
                 return options.formData(options.form);
-            }
-			if ($.isArray(options.formData)) {
+            } else if ($.isArray(options.formData)) {
                 return options.formData;
-            }
-			if (options.formData) {
+            } else if (options.formData) {
                 formData = [];
                 $.each(options.formData, function (name, value) {
                     formData.push({name: name, value: value});
@@ -233,29 +212,15 @@
 
         _onProgress: function (e, data) {
             if (e.lengthComputable) {
-                var now = +(new Date()),
-                    total,
-                    loaded;
-                if (data._time && data.progressInterval &&
-                        (now - data._time < data.progressInterval) &&
-                        e.loaded !== e.total) {
-                    return;
-                }
-                data._time = now;
-                total = data.total || this._getTotal(data.files);
-                loaded = parseInt(
-                    e.loaded / e.total * (data.chunkSize || total),
-                    10
-                ) + (data.uploadedBytes || 0);
+                var total = data.total || this._getTotal(data.files),
+                    loaded = parseInt(
+                        e.loaded / e.total * (data.chunkSize || total),
+                        10
+                    ) + (data.uploadedBytes || 0);
                 this._loaded += loaded - (data.loaded || data.uploadedBytes || 0);
                 data.lengthComputable = true;
                 data.loaded = loaded;
                 data.total = total;
-                data.bitrate = data._bitrateTimer.getBitrate(
-                    now,
-                    loaded,
-                    data.bitrateInterval
-                );
                 // Trigger a custom progress event with a total data property set
                 // to the file size(s) of the current upload and a loaded data
                 // property calculated accordingly:
@@ -265,12 +230,7 @@
                 this._trigger('progressall', e, {
                     lengthComputable: true,
                     loaded: this._loaded,
-                    total: this._total,
-                    bitrate: this._bitrateTimer.getBitrate(
-                        now,
-                        this._loaded,
-                        data.bitrateInterval
-                    )
+                    total: this._total
                 });
             }
         },
@@ -570,8 +530,6 @@
                 // and no other uploads are currently running,
                 // equivalent to the global ajaxStart event:
                 this._trigger('start');
-                // Set timer for global bitrate progress calculation:
-                this._bitrateTimer = new this._BitrateTimer();
             }
             this._active += 1;
             // Initialize the global progress values:
@@ -624,7 +582,6 @@
                 this._trigger('stop');
                 // Reset the global progress values:
                 this._loaded = this._total = 0;
-                this._bitrateTimer = null;
             }
         },
 
@@ -636,8 +593,6 @@
                 options = that._getAJAXSettings(data),
                 send = function (resolve, args) {
                     that._sending += 1;
-                    // Set timer for bitrate progress calculation:
-                    options._bitrateTimer = new that._BitrateTimer();
                     jqXHR = jqXHR || (
                         (resolve !== false &&
                         that._trigger('send', e, options) !== false &&
@@ -776,30 +731,19 @@
             }
         },
 
-        _getFileInputFiles: function (fileInput) {
-            fileInput = $(fileInput);
-            var files = $.each($.makeArray(fileInput.prop('files')), this._normalizeFile),
-                value;
-            if (!files.length) {
-                value = fileInput.prop('value');
-                if (!value) {
-                    return [];
-                }
-                // If the files property is not available, the browser does not
-                // support the File API and we add a pseudo File object with
-                // the input value as name with path information removed:
-                files = [{name: value.replace(/^.*\\/, '')}];
-            }
-            return files;
-        },
-
         _onChange: function (e) {
             var that = e.data.fileupload,
                 data = {
+                    files: $.each($.makeArray(e.target.files), that._normalizeFile),
                     fileInput: $(e.target),
                     form: $(e.target.form)
                 };
-            data.files = that._getFileInputFiles(data.fileInput);
+            if (!data.files.length) {
+                // If the files property is not available, the browser does not
+                // support the File API and we add a pseudo File object with
+                // the input value as name with path information removed:
+                data.files = [{name: e.target.value.replace(/^.*\\/, '')}];
+            }
             if (that.options.replaceFileInput) {
                 that._replaceFileInput(data.fileInput);
             }
@@ -849,7 +793,7 @@
                 return false;
             }
             if (dataTransfer) {
-                dataTransfer.dropEffect = 'copy';
+                dataTransfer.dropEffect = dataTransfer.effectAllowed = 'copy';
             }
             e.preventDefault();
         },
@@ -936,11 +880,7 @@
             if (!data || this.options.disabled) {
                 return;
             }
-            if (data.fileInput && !data.files) {
-                data.files = this._getFileInputFiles(data.fileInput);
-            } else {
-                data.files = $.each($.makeArray(data.files), this._normalizeFile);
-            }
+            data.files = $.each($.makeArray(data.files), this._normalizeFile);
             this._onAdd(null, data);
         },
 
@@ -951,11 +891,7 @@
         // The method returns a Promise object for the file upload call.
         send: function (data) {
             if (data && !this.options.disabled) {
-                if (data.fileInput && !data.files) {
-                    data.files = this._getFileInputFiles(data.fileInput);
-                } else {
-                    data.files = $.each($.makeArray(data.files), this._normalizeFile);
-                }
+                data.files = $.each($.makeArray(data.files), this._normalizeFile);
                 if (data.files.length) {
                     return this._onSend(null, data);
                 }

@@ -6,7 +6,23 @@
   %strong= model_class.human_attribute_name(:description) + ':'
   %br
   = @item.description
-
+%p
+  %strong= t("activerecord.attributes.item.file_file_name", :default => t("activerecord.labels.file_file_name", :default => "File file name")) + ":"
+  %br
+  = @item.file_file_name
+%p
+  %strong= t("activerecord.attributes.item.file_content_type", :default => t("activerecord.labels.file_content_type", :default => "File content type")) + ":"
+  %br
+  = @item.file_content_type
+%p
+  %strong= t("activerecord.attributes.item.file_file_size", :default => t("activerecord.labels.file_file_size", :default => "File file size")) + ":"
+  %br
+  = @item.file_file_size
+%p
+  %strong= t("activerecord.attributes.item.file_updated_at", :default => t("activerecord.labels.file_updated_at", :default => "File updated at")) + ":"
+  %br
+  = @item.file_updated_at
+  
 .form-actions
   = link_to t('.back', :default => t("helpers.links.back")), package_items_path(@package), :class => 'btn'
   = link_to t('.edit', :default => t("helpers.links.edit")), edit_package_item_path(@package, @item), :class => 'btn'
