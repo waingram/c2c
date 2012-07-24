@@ -45,11 +45,7 @@
           .span3
             .well.sidebar-nav
               %h3 Instructions
-              %ol
-                %li
-                  Create a new upload package for your files
-                %li
-                  Add files to the package by dragging them from your desktop and dropping them into the browser
+              = yield :instructions
     
       %footer
         %p &copy; University of Illinois at Urbana-Champaign 2012
