@@ -11,3 +11,25 @@
  *= require_self
  *= require_tree .
  */
+
+.footer {
+    margin-top: 50px;
+    padding: 20px 0;
+    border-top: 1px solid #BCBEC0;
+    font-size: .85em;
+}
+
+.footer p {
+    margin: 0;
+    padding: 0 0 10px 0;
+}
+
+.footer img {
+    float: left;
+    padding: 0 50px 40px 0;
+}
+
+.pa {
+    font-weight: bold;
+    letter-spacing: .1em;
+}

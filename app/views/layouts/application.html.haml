@@ -47,8 +47,19 @@
               %h3 Instructions
               = yield :instructions
     
-      %footer
-        %p &copy; University of Illinois at Urbana-Champaign 2012
+      %footer.footer
+        %p.pull-left
+          = link_to image_tag('imark_footer.gif', :alt => 'University of Illinois at Urbana-Champaign logo'), 'http://illinois.edu'
+          %p
+            More information: IDEALS at
+            %a{:href => "tel:2172443877"} 217-244-3877
+            or
+            %a{:href => "mailto:ideals-gen@illinois.edu"} ideals-gen@illinois.edu
+          %p
+            %abbr.initialism.pa{:title => "Illinois Digital Environment for Access to Learning and Scholarship"} IDEALS
+            | UNIVERSITY OF ILLINOIS AT URBANA-CHAMPAIGN
+            %br
+              %a{:href => "http://ideals.illinois.edu"} http://ideals.illinois.edu
     /
       Le javascript
       \==================================================
