@@ -1,4 +1,14 @@
 - model_class = Package
 .page-header
-  %h1 New upload package
+  %h1 New submission package
+
+- content_for :instructions do
+  %ol
+    %li
+      Give your submission package a title and an (optional) description.
+    %li
+      When you are ready, press the
+      %span.btn.btn-primary Create Package
+      button.
+
 = render :partial => "form"

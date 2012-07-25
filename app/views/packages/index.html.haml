@@ -1,6 +1,18 @@
 - model_class = Package
 .page-header
-  %h1 Create a new upload package
+  %h1 Create a new submission package
+
+- content_for :instructions do
+  %ol
+    %li
+      To create a new submission package, press the
+      %span.btn.btn-primary Create New
+      button. Your submission package will consist of the set of files you wish to deposit,
+      along with an Excel file that describes the package.
+    %li
+      Once you have created a new package, you will be able to add files to it.
+
+
 %table.table.table-striped
   -#%thead
   -#  %tr
