@@ -7,7 +7,7 @@
     <ol>
       <li>
         Queue files to be uploaded by clicking
-        <span class="btn btn-success">
+        <span class="btn btn-success btn-mini">
           <i class="icon-plus icon-white"></i>
           <span>Add files...</span>
         </span>
@@ -15,7 +15,7 @@
       </li>
       <li>
         When all your files are queued up, press the
-        <span class="btn btn-primary start">
+        <span class="btn btn-primary btn-mini start">
           <i class="icon-upload icon-white"></i>
           <span>Start upload</span>
         </span>
@@ -77,8 +77,8 @@
     <td class="name"><span>{%=file.name%}</span></td>
     <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
     {% if (file.error) { %}
-    <td class="error" colspan="2"><span class="label label-important">{%=locale.fileupload.error%}</span>
-      {%=locale.fileupload.errors[file.error] || file.error%}
+    <td class="error" colspan="2"><span class="label label-important">Error</span>
+      {%="file.error"%}
     </td>
     {% } else if (o.files.valid && !i) { %}
     <td>
@@ -89,7 +89,7 @@
     <td class="start">{% if (!o.options.autoUpload) { %}
       <button class="btn btn-primary">
         <i class="icon-upload icon-white"></i>
-        <span>{%=locale.fileupload.start%}</span>
+        <span>Start</span>
       </button>
       {% } %}
     </td>
@@ -115,8 +115,8 @@
     <td></td>
     <td class="name"><span>{%=file.name%}</span></td>
     <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
-    <td class="error" colspan="2"><span class="label label-important">{%=locale.fileupload.error%}</span>
-      {%=locale.fileupload.errors[file.error] || file.error%}
+    <td class="error" colspan="2"><span class="label label-important">Error</span>
+      {%=file.error%}
     </td>
     {% } else { %}
     <td class="preview">{% if (file.thumbnail_url) { %}
@@ -132,7 +132,7 @@
     <td class="delete">
       <button class="btn btn-danger" data-type="{%=file.delete_type%}" data-url="{%=file.delete_url%}">
         <i class="icon-trash icon-white"></i>
-        <span>{%=locale.fileupload.destroy%}</span>
+        <span>Delete</span>
       </button>
     </td>
   </tr>
@@ -145,7 +145,7 @@
     <!-- The Templates plugin is included to render the upload/download listings -->
     <%= javascript_include_tag "tmpl.min.js" %>
     <!-- The Load Image plugin is included for the preview images and image resizing functionality -->
-    <%= javascript_include_tag "load-image.min.js" %>Zz
+    <%= javascript_include_tag "load-image.min.js" %>
     <!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
     <%= javascript_include_tag "jquery.iframe-transport.js" %>
     <!-- The basic File Upload plugin -->

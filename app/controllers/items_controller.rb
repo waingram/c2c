@@ -6,7 +6,7 @@ class ItemsController < ApplicationController
   # GET /items.json
   def index
     @items = @package.items
-    render :json => @items.collect { |i| i.to_jq_upload }.to_json
+    render :json => @items.collect { |i| i.to_jq_upload(@package.id) }.to_json
   end
 
   # GET /items/1
@@ -40,23 +40,26 @@ class ItemsController < ApplicationController
   # POST /items.json
   def create
     p_attr = params[:item]
-    p_attr[:file] = params[:item][:file].first if params[:item][:file].class == Array
+    p_attr[:manifest] = params[:item][:manifest].first if params[:item][:manifest].class == Array
 
     @item = @package.items.new(p_attr)
 
-    if @item.save
-      respond_to do |format|
+    respond_to do |format|
+      if @item.save
         format.html {
-          render :json => [@item.to_jq_upload].to_json,
-          :content_type => 'text/html',
-          :layout => false
+          render :json => [@item.to_jq_upload(@package.id)].to_json,
+                 :content_type => 'text/html',
+                 :layout => false
         }
-        format.json {
-          render :json => [@item.to_jq_upload].to_json
+        format.json { render :json => [@item.to_jq_upload(@package.id)].to_json }
+      else
+        format.html {
+          render :json => @item.errors,
+                 :content_type => 'text/html',
+                 :layout => false
         }
+        format.json { render json: @item.errors, status: :unprocessable_entity }
       end
-    else
-      render :json => [{:error => "custom_failure"}], :status => 304
     end
   end
 

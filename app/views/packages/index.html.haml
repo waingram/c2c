@@ -6,7 +6,7 @@
   %ol
     %li
       To create a new submission package, press the
-      %span.btn.btn-primary Create New
+      %span.btn.btn-primary.btn-mini Create New
       button. Your submission package will consist of the set of files you wish to deposit,
       along with an Excel file that describes the package.
     %li
@@ -24,7 +24,7 @@
   %tbody
     - @packages.each do |package|
       %tr
-        %td= link_to package.id, package_path(package)
+        %td= link_to "View Files", package_path(package), :class => 'btn btn-mini'
         %td= package.title
         %td= package.description
         %td=l package.created_at
