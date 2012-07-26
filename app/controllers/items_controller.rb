@@ -6,6 +6,7 @@ class ItemsController < ApplicationController
   # GET /items.json
   def index
     @items = @package.items
+    render :json => @items.collect { |i| i.to_jq_upload }.to_json
   end
 
   # GET /items/1
@@ -38,16 +39,24 @@ class ItemsController < ApplicationController
   # POST /items
   # POST /items.json
   def create
-    @item = @package.items.new(params[:item])
+    p_attr = params[:item]
+    p_attr[:file] = params[:item][:file].first if params[:item][:file].class == Array
 
-    if @photo.save
+    @item = @package.items.new(p_attr)
+
+    if @item.save
       respond_to do |format|
-        format.html {redirect_to package_items_path(@package), notice: 'Item was successfully created.'}
-        @items = [@item]
-        format.json {render 'index'}
+        format.html {
+          render :json => [@item.to_jq_upload].to_json,
+          :content_type => 'text/html',
+          :layout => false
+        }
+        format.json {
+          render :json => [@item.to_jq_upload].to_json
+        }
       end
     else
-      render 'new'
+      render :json => [{:error => "custom_failure"}], :status => 304
     end
   end
 
@@ -72,11 +81,11 @@ class ItemsController < ApplicationController
   def destroy
     @item = @package.items.find(params[:id])
     @item.destroy
-
-    respond_to do |format|
-      format.html { redirect_to @package }
-      format.json { head :no_content }
-    end
+    render :json => true
+    #respond_to do |format|
+    #  format.html { redirect_to @package }
+    #  format.json { head :no_content }
+    #end
   end
 
   private
