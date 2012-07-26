@@ -43,4 +43,5 @@ gem 'haml-rails'
 
 gem 'simple_form'
 
-gem 'paperclip'
+#gem 'paperclip'
+gem 'carrierwave'

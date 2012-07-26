@@ -11,21 +11,13 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120726163913) do
+ActiveRecord::Schema.define(:version => 20120723195914) do
 
   create_table "items", :force => true do |t|
     t.string   "description"
-    t.datetime "created_at",            :null => false
-    t.datetime "updated_at",            :null => false
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
     t.integer  "package_id"
-    t.string   "manifest_file_name"
-    t.string   "manifest_content_type"
-    t.integer  "manifest_file_size"
-    t.datetime "manifest_updated_at"
-    t.string   "payload_file_name"
-    t.string   "payload_content_type"
-    t.integer  "payload_file_size"
-    t.datetime "payload_updated_at"
   end
 
   create_table "packages", :force => true do |t|
