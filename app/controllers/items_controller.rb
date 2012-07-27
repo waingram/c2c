@@ -44,22 +44,19 @@ class ItemsController < ApplicationController
 
     @item = @package.items.new(p_attr)
 
-    respond_to do |format|
-      if @item.save
+    if @item.save
+      respond_to do |format|
         format.html {
           render :json => [@item.to_jq_upload(@package.id)].to_json,
-                 :content_type => 'text/html',
-                 :layout => false
+          :content_type => 'text/html',
+          :layout => false
         }
-        format.json { render :json => [@item.to_jq_upload(@package.id)].to_json }
-      else
-        format.html {
-          render :json => @item.errors,
-                 :content_type => 'text/html',
-                 :layout => false
+        format.json {
+          render :json => [@item.to_jq_upload(@package.id)].to_json
         }
-        format.json { render json: @item.errors, status: :unprocessable_entity }
       end
+    else
+      render :json => [{:error => "custom_failure"}], :status => 304
     end
   end
 
