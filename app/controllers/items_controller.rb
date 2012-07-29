@@ -56,7 +56,11 @@ class ItemsController < ApplicationController
         }
       end
     else
-      render :json => [{:error => "custom_failure"}], :status => 304
+      if @item.manifest_integrity_error
+        render :json => {:error => @item.manifest_integrity_error}, :status => 415
+      else
+        render :json => {:error => @item.errors}, :status => 422
+      end
     end
   end
 
