@@ -1,8 +1,9 @@
 class Item < ActiveRecord::Base
   include Rails.application.routes.url_helpers
-  attr_accessible :manifest
+  attr_accessible :manifest, :payload
   belongs_to :package
   mount_uploader :manifest, ManifestUploader
+  mount_uploader :payload, PayloadUploader
 
   # one convenient method to pass jq_upload the necessary information
   def to_jq_upload(package_id)
