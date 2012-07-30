@@ -24,49 +24,94 @@
     </ol>
 <% end %>
 
-<p>
-  <strong><%= t("activerecord.attributes.package.title", :default => t("activerecord.labels.title", :default => "Title")) + ":" %></strong>
-  <%= @package.title %>
-</p>
-<p>
-  <strong><%= t("activerecord.attributes.package.description", :default => t("activerecord.labels.title", :default => "description")) + ":" %></strong>
-  <%= @package.description %>
-</p>
+<dl>
+  <dt>
+    <%= @package.title %>
+  </dt>
+  <dd>
+    <%= @package.description %>
+  </dd>
+</dl>
 
+<hr/>
+
+
+<h2>Excel manifest</h2>
+<p class="lead">Enter your Excel file here.</p>
 <%= form_for [@package, Item.new], :html => { :multipart => true, :id => "fileupload"  } do |f| %>
-  <!-- The loading indicator is shown during image processing -->
-  <div class="fileupload-loading"></div>
-  <br>
-  <!-- The table listing the files available for upload/download -->
-  <table class="table table-striped">
-    <tbody class="files"></tbody>
-  </table>
-  <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
-  <div class="row fileupload-buttonbar">
-    <div class="span5">
-      <!-- The global progress bar -->
-      <div class="progress progress-success progress-striped active fade">
-        <div class="bar" style="width:0%;"></div>
-      </div>
+    <div class="form-inner">
+        <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+        <div class="fileupload-buttonbar">
+            <!-- The fileinput-button span is used to style the file input field as button -->
+            <span class="btn btn-success fileinput-button">
+                <i class="icon-plus icon-white"></i>
+                <span>Add file...</span>
+                <%= f.file_field :manifest, :multiple => true %>
+            </span>
+            <button type="submit" class="btn btn-primary start">
+                <i class="icon-upload icon-white"></i>
+                <span>Upload all</span>
+            </button>
+            <button type="reset" class="btn btn-warning cancel">
+                <i class="icon-ban-circle icon-white"></i>
+                <span>Remove all</span>
+            </button>
+        </div>
+        <!-- The loading indicator is shown during image processing -->
+        <div class="fileupload-loading"></div>
+        <br>
+        <!-- The table listing the files available for upload/download -->
+        <table class="table table-striped">
+            <tbody class="files"></tbody>
+        </table>
+        <div class="span5">
+            <!-- The global progress bar -->
+            <div class="progress progress-success progress-striped active fade">
+                <div class="bar" style="width:0%;"></div>
+            </div>
+        </div>
     </div>
-    <div class="span7">
-      <!-- The fileinput-button span is used to style the file input field as button -->
-      <span class="btn btn-success fileinput-button">
-        <i class="icon-plus icon-white"></i>
-        <span>Add files...</span>
-        <%= f.file_field :manifest, :multiple => true %>
-      </span>
-      <button type="submit" class="btn btn-primary start">
-        <i class="icon-upload icon-white"></i>
-        <span>Start upload</span>
-      </button>
-      <button type="reset" class="btn btn-warning cancel">
-        <i class="icon-ban-circle icon-white"></i>
-        <span>Remove all</span>
-      </button>
-    </div>
-  </div>
 <% end %>
+
+<br/>
+
+<h2>Package payload</h2>
+<p class="lead">Enter the remaining package files here.</p>
+<%= form_for [@package, Item.new], :html => { :multipart => true, :id => "groupupload"  } do |f| %>
+    <div class="form-inner">
+        <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+        <div class="fileupload-buttonbar">
+            <!-- The fileinput-button span is used to style the file input field as button -->
+            <span class="btn btn-success fileinput-button">
+              <i class="icon-plus icon-white"></i>
+              <span>Add files...</span>
+              <%= f.file_field :payload, :multiple => true %>
+            </span>
+            <button type="submit" class="btn btn-primary start">
+              <i class="icon-upload icon-white"></i>
+              <span>Upload all</span>
+            </button>
+            <button type="reset" class="btn btn-warning cancel">
+              <i class="icon-ban-circle icon-white"></i>
+              <span>Remove all</span>
+            </button>
+        </div>
+        <!-- The loading indicator is shown during image processing -->
+        <div class="fileupload-loading"></div>
+        <br>
+        <!-- The table listing the files available for upload/download -->
+        <table class="table table-striped">
+          <tbody class="files"></tbody>
+        </table>
+        <div class="span5">
+          <!-- The global progress bar -->
+          <div class="progress progress-success progress-striped active fade">
+            <div class="bar" style="width:0%;"></div>
+          </div>
+        </div>
+    </div>
+<% end %>
+
 
 <!-- IMPORTANT fade class makes fileupload depend on css transition effect REMOVE or RENAME it -->
 <!-- The template to display files available for upload -->
@@ -107,18 +152,6 @@
   {% } %}
 </script>
 
-
-<script type="text/javascript">
-    function objToString (obj) {
-        var str = '';
-        for (var p in obj) {
-            if (obj.hasOwnProperty(p)) {
-                str += p + "::" + obj[p] + '\n';
-            }
-        }
-        return str;
-    }
-</script>
 <!-- The template to display files available for download -->
 <script id="template-download" type="text/x-tmpl">
   {% for (var i=0, file; file=o.files[i]; i++) { %}
