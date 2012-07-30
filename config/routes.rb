@@ -1,9 +1,11 @@
 C2c::Application.routes.draw do
-  
+
+
   root to: "packages#index"
 
   resources :packages do
     resources :items
+    resources :spreadsheets
   end
 
   # The priority is based upon order of creation:

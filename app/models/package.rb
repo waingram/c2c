@@ -3,4 +3,5 @@ class Package < ActiveRecord::Base
   validates_presence_of :title, :on => :create, :message => "can't be blank"
 
   has_many :items
+  has_many :spreadsheets
 end

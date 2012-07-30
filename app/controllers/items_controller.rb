@@ -40,7 +40,6 @@ class ItemsController < ApplicationController
   # POST /items.json
   def create
     p_attr = params[:item]
-    p_attr[:manifest] = params[:item][:manifest].first if params[:item][:manifest].class == Array
     p_attr[:payload] = params[:item][:payload].first if params[:item][:payload].class == Array
 
     @item = @package.items.new(p_attr)
@@ -57,8 +56,8 @@ class ItemsController < ApplicationController
         }
       end
     else
-      if @item.manifest_integrity_error
-        render :json => [{:error => @item.manifest_integrity_error}], :status => 415
+      if @item.payload_integrity_error
+        render :json => [{:error => @item.payload_integrity_error}], :status => 415
       else
         render :json => [{:error => @item.errors}], :status => 422
       end

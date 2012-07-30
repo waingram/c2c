@@ -38,7 +38,7 @@
 
 <h2>Excel manifest</h2>
 <p class="lead">Enter your Excel file here.</p>
-<%= form_for [@package, Item.new], :html => { :multipart => true, :id => "fileupload"  } do |f| %>
+<%= form_for [@package, Spreadsheet.new], :html => { :multipart => true, :id => "fileupload"  } do |f| %>
     <div class="form-inner">
         <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
         <div class="fileupload-buttonbar">

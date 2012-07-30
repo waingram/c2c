@@ -45,8 +45,6 @@ class ManifestUploader < CarrierWave::Uploader::Base
   # def extension_white_list
   #   %w(jpg jpeg gif png)
   # end
-
-  # Only allow Excel files
   def extension_white_list
      %w(xls xlsx)
   end
